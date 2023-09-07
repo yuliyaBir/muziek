@@ -1,2 +1,11 @@
-package be.vdab.muziek.exceptions;public class LabelInAlbumNietGevondenException {
+package be.vdab.muziek.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class LabelInAlbumNietGevondenException extends RuntimeException{
+    public LabelInAlbumNietGevondenException() {
+        super("Label in album niet gevonden.");
+    }
 }

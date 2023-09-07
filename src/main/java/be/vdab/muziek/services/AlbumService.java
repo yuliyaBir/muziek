@@ -1,2 +1,43 @@
-package be.vdab.muziek.services;public class AlbumService {
+package be.vdab.muziek.services;
+
+import be.vdab.muziek.domain.Album;
+import be.vdab.muziek.dto.AlbumMetTotaleTijd;
+import be.vdab.muziek.exceptions.AlbumNietGevondenException;
+import be.vdab.muziek.repositories.AlbumRepository;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional(readOnly = true)
+public class AlbumService {
+    private final AlbumRepository albumRepository;
+
+    public AlbumService(AlbumRepository albumRepository) {
+        this.albumRepository = albumRepository;
+    }
+    public List<Album> findAll(){
+        return albumRepository.findAllMetArtiesten();
+    }
+    public Optional<Album> findById(long id){
+        return albumRepository.findById(id);
+    }
+    public AlbumMetTotaleTijd findAlbumMetTotaleTijdById(long id){
+        var album = albumRepository.findAlbumMetTotaleTijdById(id).orElseThrow(AlbumNietGevondenException::new);
+        LocalTime som = LocalTime.of(00,00,00);
+        for (var track: album.getTracks()) {
+            var tijd = track.getTijd();
+            som = som.plusHours(tijd.getHour()).plusMinutes(tijd.getMinute()).plusSeconds(tijd.getSecond());
+        }
+       return new AlbumMetTotaleTijd(album.getNaam(),
+               album.getArtiest().getNaam(),
+               album.getJaar(),
+               album.getLabel().getNaam(),
+               som,
+               album.getTracks());
+    }
 }

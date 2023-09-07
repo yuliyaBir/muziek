@@ -1,4 +1,22 @@
-package be.vdab.muziek.domain.repositories;
+package be.vdab.muziek.repositories;
 
-public interface AlbumRepository {
+import be.vdab.muziek.domain.Album;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface AlbumRepository extends JpaRepository<Album, Long> {
+    @Query("""
+        select a from Album a
+        join fetch a.artiest
+        order by a.naam
+        """)
+//    @EntityGraph(attributePaths = "artiest")
+    List<Album> findAllMetArtiesten();
+
+    @EntityGraph(attributePaths = {"tracks", "artiest", "label"})
+    Optional<Album> findAlbumMetTotaleTijdById(Long id);
 }
