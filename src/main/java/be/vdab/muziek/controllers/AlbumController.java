@@ -1,16 +1,14 @@
 package be.vdab.muziek.controllers;
 
 import be.vdab.muziek.domain.Album;
-import be.vdab.muziek.domain.Track;
 import be.vdab.muziek.dto.AlbumMetTotaleTijd;
 import be.vdab.muziek.exceptions.AlbumNietGevondenException;
 import be.vdab.muziek.services.AlbumService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
 @RestController
@@ -35,5 +33,15 @@ public class AlbumController {
     @GetMapping("{id}")
     AlbumMetTotaleTijd findAlbumMetTotaleTijdById(@PathVariable long id){
         return albumService.findAlbumMetTotaleTijdById(id);
+    }
+    @GetMapping(params = "jaar")
+    Stream<AlbumBeknopt> findByJaar(int jaar){
+        return albumService.findByJaar(jaar).stream()
+                .map(album -> new AlbumBeknopt(album));
+    }
+    private record GewijzigdeScore(@Min(0)  @Max(10) int score){}
+    @PatchMapping("{id}/score")
+    void wijzigScore(@PathVariable long id, @RequestBody @Valid GewijzigdeScore gewijzigdeScore){
+        albumService.wijzigScore(id, gewijzigdeScore.score);
     }
 }

@@ -1,9 +1,11 @@
 package be.vdab.muziek.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -26,7 +28,7 @@ public class Album {
     @CollectionTable(name = "tracks",
             joinColumns = @JoinColumn(name = "albumId"))
     @OrderBy("naam")
-    private Set<Track> tracks;
+    private Set<Track> tracks = new LinkedHashSet<Track>();
 
     public Album(long id, String naam, int jaar, long barcode, int score, Artiest artiest, Label label) {
         this.id = id;
@@ -36,7 +38,6 @@ public class Album {
         this.score = score;
         this.artiest = artiest;
         this.label = label;
-        tracks = new LinkedHashSet<Track>();
     }
 
     public Album (){}
@@ -70,5 +71,21 @@ public class Album {
     }
     public Set<Track> getTracks() {
         return Collections.unmodifiableSet(tracks);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Album album)) return false;
+        return barcode == album.barcode;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(barcode);
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

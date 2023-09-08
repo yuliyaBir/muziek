@@ -1,6 +1,5 @@
 package be.vdab.muziek.dto;
 
-import be.vdab.muziek.domain.Album;
 import be.vdab.muziek.domain.Track;
 
 import java.time.LocalTime;

@@ -2,6 +2,10 @@ package be.vdab.muziek.domain;
 
 import jakarta.persistence.*;
 
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "artiesten")
 public class Artiest {
@@ -9,6 +13,9 @@ public class Artiest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String naam;
+    @OneToMany(mappedBy = "artiest")
+    @OrderBy("naam")
+    private Set<Album> albums;
 
     public long getId() {
         return id;
@@ -18,9 +25,14 @@ public class Artiest {
         return naam;
     }
 
+    public Set<Album> getAlbums() {
+        return Collections.unmodifiableSet(albums);
+    }
+
     public Artiest(String naam) {
         this.id = 0;
         this.naam = naam;
+        albums = new LinkedHashSet<Album>();
     }
     public Artiest(){}
 }
