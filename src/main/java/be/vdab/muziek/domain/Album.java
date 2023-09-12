@@ -30,18 +30,6 @@ public class Album {
     @OrderBy("naam")
     private Set<Track> tracks = new LinkedHashSet<Track>();
 
-    public Album(long id, String naam, int jaar, long barcode, int score, Artiest artiest, Label label) {
-        this.id = id;
-        this.naam = naam;
-        this.jaar = jaar;
-        this.barcode = barcode;
-        this.score = score;
-        this.artiest = artiest;
-        this.label = label;
-    }
-
-    public Album (){}
-
     public long getId() {
         return id;
     }

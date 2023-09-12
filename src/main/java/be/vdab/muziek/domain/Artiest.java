@@ -28,11 +28,4 @@ public class Artiest {
     public Set<Album> getAlbums() {
         return Collections.unmodifiableSet(albums);
     }
-
-    public Artiest(String naam) {
-        this.id = 0;
-        this.naam = naam;
-        albums = new LinkedHashSet<Album>();
-    }
-    public Artiest(){}
 }

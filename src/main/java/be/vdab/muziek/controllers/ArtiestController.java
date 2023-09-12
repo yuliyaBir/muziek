@@ -2,6 +2,7 @@ package be.vdab.muziek.controllers;
 
 import be.vdab.muziek.domain.Album;
 import be.vdab.muziek.dto.AlbumMetNaamEnJaar;
+import be.vdab.muziek.dto.AlbumMetTotaleTijd;
 import be.vdab.muziek.exceptions.ArtiestNietGevondenException;
 import be.vdab.muziek.services.ArtiestService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -20,17 +23,18 @@ public class ArtiestController {
     public ArtiestController(ArtiestService artiestService) {
         this.artiestService = artiestService;
     }
+    @GetMapping("{id}/albums")
+    Set<AlbumMetNaamEnJaar> findAlbumsVan(@PathVariable long id){
+        var artiest =  artiestService.findById(id)
+                .orElseThrow(ArtiestNietGevondenException::new);
+        var albums = artiest.getAlbums();
+        return albums.stream().map(AlbumMetNaamEnJaar::new).collect(Collectors.toSet());
+    }
 //    @GetMapping("{id}/albums")
-//    List<Album> findAlbumsVan(@PathVariable long id){
+//    Stream<AlbumMetNaamEnJaar> findAlbumsById(@PathVariable long id){
 //        return artiestService.findById(id)
 //                .orElseThrow(ArtiestNietGevondenException::new)
-//                .getAlbums().stream().toList();
+//                .getAlbums().stream()
+//                .map(album -> new AlbumMetNaamEnJaar(album));
 //    }
-    @GetMapping("{id}/albums")
-    Stream<AlbumMetNaamEnJaar> findAlbumsById(@PathVariable long id){
-        return artiestService.findById(id)
-                .orElseThrow(ArtiestNietGevondenException::new)
-                .getAlbums().stream()
-                .map(album -> new AlbumMetNaamEnJaar(album));
-    }
 }

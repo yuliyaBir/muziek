@@ -17,9 +17,4 @@ public class Label {
     public String getNaam() {
         return naam;
     }
-
-    public Label(String naam) {
-        this.naam = naam;
-    }
-    public Label(){}
 }

@@ -27,7 +27,7 @@ public class AlbumService {
     }
     public AlbumMetTotaleTijd findAlbumMetTotaleTijdById(long id){
         var album = albumRepository.findAlbumMetTotaleTijdById(id).orElseThrow(AlbumNietGevondenException::new);
-        LocalTime som = LocalTime.of(00,00,00);
+        LocalTime som = LocalTime.MIN;
         for (var track: album.getTracks()) {
             var tijd = track.getTijd();
             som = som.plusHours(tijd.getHour()).plusMinutes(tijd.getMinute()).plusSeconds(tijd.getSecond());

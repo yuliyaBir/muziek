@@ -9,12 +9,6 @@ import java.util.Objects;
 public class Track {
     private String naam;
     private LocalTime tijd;
-    public Track(String naam, LocalTime tijd) {
-        this.naam = naam;
-        this.tijd = tijd;
-    }
-    public Track(){}
-
     public String getNaam() {
         return naam;
     }
