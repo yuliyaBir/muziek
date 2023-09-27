@@ -24,17 +24,10 @@ public class ArtiestController {
         this.artiestService = artiestService;
     }
     @GetMapping("{id}/albums")
-    Set<AlbumMetNaamEnJaar> findAlbumsVan(@PathVariable long id){
-        var artiest =  artiestService.findById(id)
-                .orElseThrow(ArtiestNietGevondenException::new);
-        var albums = artiest.getAlbums();
-        return albums.stream().map(AlbumMetNaamEnJaar::new).collect(Collectors.toSet());
+    Stream<AlbumMetNaamEnJaar> findAlbumsById(@PathVariable long id){
+        return artiestService.findById(id)
+                .orElseThrow(ArtiestNietGevondenException::new)
+                .getAlbums().stream()
+                .map(album -> new AlbumMetNaamEnJaar(album));
     }
-//    @GetMapping("{id}/albums")
-//    Stream<AlbumMetNaamEnJaar> findAlbumsById(@PathVariable long id){
-//        return artiestService.findById(id)
-//                .orElseThrow(ArtiestNietGevondenException::new)
-//                .getAlbums().stream()
-//                .map(album -> new AlbumMetNaamEnJaar(album));
-//    }
 }
